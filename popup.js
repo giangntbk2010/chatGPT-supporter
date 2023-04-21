@@ -1,45 +1,111 @@
-// Lấy danh sách các cụm từ từ chrome storage và hiển thị lên popup
-chrome.storage.sync.get('phrases', ({ phrases }) => {
-  if (!phrases) {
-    phrases = [];
-  }
+// Get the stored phrases from local storage
+const storedPhrases = localStorage.getItem('phrases');
+let phrases = [];
 
-  const phrasesList = document.getElementById('phrases');
-  phrasesList.innerHTML = '';
+if (storedPhrases) {
+  phrases = JSON.parse(storedPhrases);
+}
 
-  phrases.forEach((phrase) => {
-    const item = document.createElement('div');
-    item.textContent = phrase;
-    item.classList.add('phrase-item');
-    phrasesList.appendChild(item);
+// Get elements
+const addPhraseBtn = document.getElementById('add-phrase-btn');
+const phraseInput = document.getElementById('phrase-input');
+const phrasesList = document.getElementById('phrases-list');
+
+// Add new phrase to list
+function addPhrase(phrase) {
+  // Create list item element
+  const listItem = document.createElement('li');
+  listItem.className = 'phrase-item';
+
+  // Create phrase element
+  const phraseSpan = document.createElement('span');
+  phraseSpan.className = 'phrase';
+  phraseSpan.textContent = phrase;
+
+  // Create buttons element
+  const buttonsDiv = document.createElement('div');
+  buttonsDiv.className = 'buttons';
+
+  // Create edit button
+  const editBtn = document.createElement('button');
+  editBtn.className = 'edit-btn';
+  editBtn.textContent = 'Edit';
+
+  // Add edit button click listener
+  editBtn.addEventListener('click', () => {
+    const newPhrase = prompt('Enter new phrase', phrase);
+
+    if (newPhrase !== null && newPhrase !== '') {
+      phraseSpan.textContent = newPhrase;
+      const index = phrases.indexOf(phrase);
+      if (index > -1) {
+        phrases[index] = newPhrase;
+        savePhrases();
+      }
+    }
   });
-});
 
-// Lưu cụm từ mới vào chrome storage khi click vào nút Add
-const addButton = document.getElementById('add');
-addButton.addEventListener('click', () => {
-  const phraseInput = document.getElementById('phrase');
+  // Create remove button
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'remove-btn';
+  removeBtn.textContent = 'Remove';
+
+  // Add remove button click listener
+  removeBtn.addEventListener('click', () => {
+    phrases.splice(phrases.indexOf(phrase), 1);
+    savePhrases();
+    listItem.remove();
+  });
+
+  // Create copy button
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'copy-btn';
+  copyBtn.textContent = 'Copy';
+
+  // Add copy button click listener
+  copyBtn.addEventListener('click', () => {
+    const input = document.createElement('textarea');
+    input.value = phrase;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    alert(`'${phrase}' has been copied to clipboard!`);
+  });
+
+  // Append elements to list item
+  buttonsDiv.appendChild(editBtn);
+  buttonsDiv.appendChild(removeBtn);
+  buttonsDiv.appendChild(copyBtn);
+  listItem.appendChild(phraseSpan);
+  listItem.appendChild(buttonsDiv);
+
+  // Append list item to phrases list
+  phrasesList.appendChild(listItem);
+}
+
+// Load phrases from local storage
+function loadPhrases() {
+  phrasesList.innerHTML = '';
+  phrases.forEach(phrase => addPhrase(phrase));
+}
+
+// Save phrases to local storage
+function savePhrases() {
+  localStorage.setItem('phrases', JSON.stringify(phrases));
+  loadPhrases();
+}
+
+// Add phrase click listener
+addPhraseBtn.addEventListener('click', () => {
   const phrase = phraseInput.value.trim();
 
-  if (!phrase) {
-    return;
-  }
-
-  chrome.storage.sync.get('phrases', ({ phrases }) => {
-    if (!phrases) {
-      phrases = [];
-    }
-
+  if (phrase !== '') {
     phrases.push(phrase);
-    chrome.storage.sync.set({ phrases });
-    
-    const phrasesList = document.getElementById('phrases');
-    const item = document.createElement('div');
-    item.textContent = phrase;
-    item.classList.add('phrase-item');
-    phrasesList.appendChild(item);
-
+    savePhrases();
     phraseInput.value = '';
-  });
+  }
 });
 
+// Load phrases on page load
+loadPhrases();

@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "chatGPT-suporter",
+  "version": "1.0",
+  "description": "Một tiện ích mở rộng cho Google Chrome cho phép người dùng thêm các cụm từ thường sử dụng khi chat với ChatGPT trên trang https://chat.openai.com/.",
+  "icons": {
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "permissions": ["activeTab", "storage"],
+  "action": {
+    "default_title": "Tiêu đề tiện ích mở rộng",
+    "default_popup": "popup.html"
+  }
+}
+

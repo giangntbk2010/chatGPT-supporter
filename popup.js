@@ -27,9 +27,8 @@ function addPhrase(phrase) {
   buttonsDiv.className = 'buttons';
 
   // Create edit button
-  const editBtn = document.createElement('button');
-  editBtn.className = 'edit-btn';
-  editBtn.textContent = 'Edit';
+  const editBtn = document.createElement('i');
+  editBtn.className = 'fas fa-pencil-alt edit-btn';
 
   // Add edit button click listener
   editBtn.addEventListener('click', () => {
@@ -46,9 +45,8 @@ function addPhrase(phrase) {
   });
 
   // Create remove button
-  const removeBtn = document.createElement('button');
-  removeBtn.className = 'remove-btn';
-  removeBtn.textContent = 'Remove';
+  const removeBtn = document.createElement('i');
+  removeBtn.className = 'fas fa-trash-alt remove-btn';
 
   // Add remove button click listener
   removeBtn.addEventListener('click', () => {
@@ -58,9 +56,8 @@ function addPhrase(phrase) {
   });
 
   // Create copy button
-  const copyBtn = document.createElement('button');
-  copyBtn.className = 'copy-btn';
-  copyBtn.textContent = 'Copy';
+  const copyBtn = document.createElement('i');
+  copyBtn.className = 'far fa-copy copy-btn';
 
   // Add copy button click listener
   copyBtn.addEventListener('click', () => {

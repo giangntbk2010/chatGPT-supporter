@@ -44,8 +44,6 @@ button[type="submit"] {
   background-color: #0099ff;
   color: #fff;
   border: none;
-  padding: 0.5em 1em;
-  font-size: 1.2em;
   cursor: pointer;
   margin-left: 0.5em;
 }
@@ -73,7 +71,7 @@ li span {
   margin-right: 0.5em;
 }
 
-li button {
+li i {
   background-color: #0099ff;
   color: #fff;
   border: none;
